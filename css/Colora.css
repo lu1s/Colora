@@ -1,0 +1,24 @@
+.colora_colors{
+
+}
+.colora_color{
+	font-family:'Arial',arial,serif;
+	float:left;
+	width:20px;
+	height:20px;
+	margin:3px;
+	padding:8px 5px 2px 5px;
+	font-size:10px;
+	text-align:center;
+	color:white;
+	border:solid 1px white;
+}
+.colora_color span{
+	text-align:center;
+	background:black;
+	padding:3px;
+}
+#colora_reset{
+	float:right;
+	margin-top:40px;
+}
