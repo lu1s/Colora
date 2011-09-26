@@ -5,7 +5,6 @@ body{
 	margin:0px;
 	padding:0px;
 	font-family:'Istok Web',sans-serif;
-//	font-family:'Arial',arial,serif;
 	text-align:center;
 }
 button{
@@ -166,4 +165,8 @@ button:hover{
 	padding:5px;
 	font-size:18px;
 	width:60%;
+}
+#container{
+	min-width:855px;
+	min-height:314px;
 }

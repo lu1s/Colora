@@ -3,7 +3,7 @@ function Colora(options){
 	var opts = {
 		level: 1,
 		points: 0,
-		timeout: 90, //initial color rotation timeout
+		timeout: 150, //initial color rotation timeout
 		colors: ["#6152E0","#EBED45","#44DC32","#71207D","#D9321E"],
 		boxes: ["colora_box_1","colora_box_2","colora_box_3"],
 		buttonElement: "colora_play",
@@ -13,7 +13,9 @@ function Colora(options){
 		autoLoad: true
 		
 	};
-	if(typeof options == "object" && typeof options.length == "undefined"){
+	if(options.autoLoad == false)
+		opts.autoLoad = false;
+/*	if(typeof options == "object" && typeof options.length == "undefined"){
 		options.level ? opts.level = options.level : null;
 		options.points ? opts.points = options.points : null;
 		if(typeof options.colors == "object" && typeof options.colors.length == "number" && options.colors.length>4)
@@ -28,11 +30,14 @@ function Colora(options){
 			else
 				alert("Colora error: One or more of the specified boxes element ids does not exist. Default boxes were set up.")
 		}
+		if(options.autoload == false)
+			opts.autoLoad = false;
 	}
+*/
 	this.options = opts;
 	this.points = opts.points;
 	this.level = opts.level;
-	if(this.options.autoLoad)
+	if(opts.autoLoad)
 		this.loadGUI();
 }
 Colora.prototype = {
@@ -110,7 +115,7 @@ Colora.prototype = {
 				for(var i=0;i<6;i++)
 					color+=hex[Math.floor(Math.random()*hex.length)];
 				this.options.colors.push(color);
-				this.refreshColors();
+				this.refreshColors(false);
 			}
 			document.getElementById(this.options.levelElement).innerHTML = this.level;
 			document.getElementById(this.options.pointsElement).innerHTML = this.points;
@@ -146,6 +151,11 @@ Colora.prototype = {
 		clear.setAttribute("class","clear");
 		colors.appendChild(clear);
 		/* only for first time building GUI */
+		for(var i=0;i<document.getElementsByClassName("colora_colorsdiv").length;i++){
+			var parent = document.getElementsByClassName("colora_colors")[i];
+			var child = document.getElementById("colora_colorsdiv_"+i);
+			parent.removeChild(child);
+		}
 		if(isNew){
 			for(var i=0; i<document.getElementsByClassName("colora_colors").length;i++){
 				var element = document.getElementsByClassName("colora_colors")[i];

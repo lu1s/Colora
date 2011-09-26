@@ -28,14 +28,16 @@
 			<p>Every time you reach 1000 points the level increases by one, and a new color is added to the list</p>
 			<button>Thank you. Now let me play!</button>
 		</div>
-		<div id="helpme">help me!</div>
-		<div id="machine">
-			<div class="num" id="colora_box_1"></div>
-			<div class="num" id="colora_box_2"></div>
-			<div class="num" id="colora_box_3"></div>
-			<div class="clear"></div>
+		<div id="container">
+			<div id="helpme">help me!</div>
+			<div id="machine">
+				<div class="num" id="colora_box_1"></div>
+				<div class="num" id="colora_box_2"></div>
+				<div class="num" id="colora_box_3"></div>
+				<div class="clear"></div>
+			</div>
+			<button id="colora_play">PLAY</button>
 		</div>
-		<button id="colora_play">PLAY</button>
 		<div id="bottom">
 			<div id="level"><span>LEVEL</span><br/><span id="colora_level"></span></div>
 			<div id="points"><span>POINTS</span><br/><span id="colora_points"></span></div>
@@ -50,8 +52,7 @@
 		<script src="js/Colora.js"></script>
 		
 		<script>
-			var colora = new Colora();
-			var colorsArray = colora.colors;
+			var colora = new Colora({autoLoad:false});
 			var closeHelp = function(){
 				$(".blacky").fadeOut();
 				$("#instructions").fadeOut();
@@ -84,6 +85,13 @@
 				});
 				if(!getCookie("instructions"))
 					$(".blacky").fadeIn(200,function(){$("#instructions").fadeIn();})
+				if(getCookie("level"))
+					colora.level = parseInt(getCookie("level"));
+				if(getCookie("points"))
+					colora.points = parseInt(getCookie("points"));
+				if(getCookie("colors"))
+					colora.options.colors = JSON.parse(getCookie("colors"));
+				colora.loadGUI();
 				$("#helpme").bind("click",function(){
 					if(!$(".blacky").is(":visible"))
 						$(".blacky").fadeIn(200,function(){$("#instructions").fadeIn();})
@@ -129,6 +137,9 @@
 						case 3:
 							colora.stop();
 							colora.state = 0;
+							setCookie("level",colora.level,3650);
+							setCookie("points",colora.points,3650);
+							setCookie("colors",JSON.stringify(colora.options.colors),3650);
 							$(this).html("PLAY");
 						break;
 					}
