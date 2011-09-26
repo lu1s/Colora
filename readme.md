@@ -7,7 +7,9 @@ Author
 **Luis Pulido**
 
 * Twitter: http://twitter.com/pulidoman
+
 * Email: lpulido@norbakgroup.com
+
 * Github: http://github.com/lu1s
 
 Description
