@@ -73,6 +73,22 @@ button:hover{
 	background:#C00172;
 	color:white;
 }
+#donate_please{
+	position:fixed;
+	bottom:128px;
+	right:5px;
+	width:280px;
+	height:120px;
+	background:white;
+	text-align:right;
+	color:#333;
+}
+#donate_please h3{
+	font-size:14px;
+}
+#donate_please p{
+	font-size:12px;
+}
 #level{
 	float:left;
 	margin:5px;
@@ -98,19 +114,30 @@ button:hover{
 #bottom button:hover{
 	background:white !important;
 }
-#helpme{
+.helpme{
 	z-index:1100;
 	position:fixed;
 	top:5px;
 	right:5px;
-	width:180px;
+	width:220px;
 	font-size:15px;
 	text-align:right;
 	color:#333;
 	font-weight:700;
 }
+.helpme span{
+	color:#333;	
+}
+.helpme span a{
+	text-decoration:none;
+	color:#333;
+}
+.helpme span a:hover;{
+	text-decoration:none;
+	color:#111;
+}
 #helpme:hover{
-	color:#C00172;
+	color:#C10500 !important;
 	cursor:pointer;
 }
 .blacky{
