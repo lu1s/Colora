@@ -123,11 +123,9 @@ Colora.prototype = {
 	},
 	refreshColors: function(isNew){
 		/*clear existing colors*/
-		if(!isNew){
-			for(var i=0; i<document.getElementsByClassName("colora_colorsdiv").length;i++){
-				var element = document.getElementsByClassName("colora_colorsdiv")[i];
-				element.innerHTML = "";
-			}
+		for(var i=0; i<document.getElementsByClassName("colora_colors").length;i++){
+			var element = document.getElementsByClassName("colora_colors")[i];
+			element.innerHTML = "";
 		}
 		/* Fill all colora_color divs class elements with the colors */
 		var colors = document.createElement("div")
@@ -138,32 +136,18 @@ Colora.prototype = {
 			var span = document.createElement("span");
 			span.innerHTML = (parseInt(i)+1).toString();
 			col.appendChild(span)
-			if(isNew)
-				colors.appendChild(col);
-			else{
-				for(var j=0; j<document.getElementsByClassName("colora_colorsdiv").length;j++){
-					var element = document.getElementsByClassName("colora_colorsdiv")[j];
-					element.appendChild(col.cloneNode(true));
-				}
-			}
+			colors.appendChild(col);
 		}
 		var clear = document.createElement("div");
 		clear.setAttribute("class","clear");
 		colors.appendChild(clear);
 		/* only for first time building GUI */
-		for(var i=0;i<document.getElementsByClassName("colora_colorsdiv").length;i++){
-			var parent = document.getElementsByClassName("colora_colors")[i];
-			var child = document.getElementById("colora_colorsdiv_"+i);
-			parent.removeChild(child);
-		}
-		if(isNew){
-			for(var i=0; i<document.getElementsByClassName("colora_colors").length;i++){
-				var element = document.getElementsByClassName("colora_colors")[i];
-				var colorsDiv = colors.cloneNode(true);
-				colorsDiv.id = "colora_colorsdiv_"+i;
-				colorsDiv.setAttribute("class","colora_colorsdiv");
-				element.appendChild(colors.cloneNode(true));
-			}
+		for(var i=0; i<document.getElementsByClassName("colora_colors").length;i++){
+			var element = document.getElementsByClassName("colora_colors")[i];
+			var colorsDiv = colors.cloneNode(true);
+			colorsDiv.setAttribute("id","colora_colorsdiv_"+i);
+			colorsDiv.setAttribute("class","colora_colorsdiv");
+			element.appendChild(colors.cloneNode(true));
 		}
 		/* End of filling colora_colors */
 	},
