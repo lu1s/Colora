@@ -2,6 +2,7 @@
 manifest.json
 128.png
 favicon.ico
+test.html
 lib-cov
 *.seed
 *.log

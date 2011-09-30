@@ -22,17 +22,16 @@
 			<p>And there's three boxes. Press [PLAY] and the boxes will randomly display the colors and their numbers.</p>
 			<p>Now press [STOP] and the first box will stop. Press it again to stop the second and finally do it again to stop the third box.</p>
 			<ul>
-				<li>If three boxes are equal, you got 200 points.</li>
+				<li>If three boxes are equal, you got 200 points and a new background image from Flickr</li>
 				<li>If two boxes are equal and next to each other, you got 100 points.</li>
 				<li>If two boxes are equal and separated from each other, you got 50 points.</li>
 				<li>If all boxes are different you got no points... obviously.</li>
 			</ul>
-			<p>Every time you reach 1000 points the level increases by one, and a new color is added to the list</p>
-			<button>Thank you. Now let me play!</button>
+			<p>Every time you reach 1000 points the level increases by one and a new color is added to the list... and the speed of the changing color increases!</p>
+			<button style="border:solid 3px #C05192">Thank you. Now let me play!</button>
 		</div>
 		<div id="container">
-			<div class="helpme"><span><a href="http://github.com/lu1s/colora" target="_blank">Version 0.1.0 (09-27-2011)</a></span><br/><span id="helpme" style="color:#C00172">Instructions</span></div>
-			<div id="donate"></div>
+			<div class="helpme"><span><a href="http://github.com/lu1s/colora" target="_blank">Version 0.1.1 (09-29-2011)</a></span><br/><span id="helpme" style="color:#C00172">Instructions</span></div>
 			<div id="machine">
 				<div class="num" id="colora_box_1"></div>
 				<div class="num" id="colora_box_2"></div>
@@ -49,8 +48,8 @@
 			<div class="clear"></div>
 		</div>
 		<div id="donate_please">
-			<h3>Like this game?</h3>
-			<p>Donate a buck or two so we can<br/> improve this game faster than ever.</p>
+			<h3><span class="span">Like this game?</span></h3>
+			<p><span class="span">Donate a buck or two so we can</span><br/><span class="span">improve this game faster than ever.</span></p>
 			 <form action="https://www.paypal.com/cgi-bin/webscr" method="post">  
 				 <!-- Identify your business so that you can collect the payments. -->  
 				 <input type="hidden" name="business" value="luis@plumit.org">  
@@ -65,109 +64,15 @@
 				 <img alt="" border="0" width="1" height="1" src="https://www.paypal.com/en_US/i/scr/pixel.gif" />  
 			</form>
 		</div>
+		
+		<!-- <audio src="scripts/sounds/iPadUnlock.mp3" preload="auto"></audio> -->
 		<script src="js/jquery.min.js"></script>
 		<script src="js/jquery.ui.min.js"></script>
 		<script src="js/jquery.alerts.js"></script>
 		<script src="js/cookies.js"></script>
+		<script src="js/Notifier.js"></script>
 		<script src="js/Colora.js"></script>
-		
-		<script>
-			var colora = new Colora({autoLoad:false});
-			var closeHelp = function(){
-				$(".blacky").fadeOut();
-				$("#instructions").fadeOut();
-				setCookie("instructions","1",365*5);
-			};
-			var colorifyCounter = 0;
-			var colorifyTo;
-			var colorify = function(){
-				colorifyTo = window.setTimeout(function(){
-					var hex = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"];
-					var col = "#";
-					for(var i=0;i<6;i++)
-						col+=hex[Math.floor(Math.random()*hex.length)];
-					$("#title > h1 > span:eq("+colorifyCounter+")").animate({
-						color:col
-					},1800)
-					colorifyCounter++;
-					if(colorifyCounter == 6)
-						colorifyCounter=0;
-					colorify();
-				},1000)
-			}
-			$("document").ready(function(){	
-
-				$("#instructions > button").bind("click",function(){
-					closeHelp();
-				});
-				$(".blacky").bind("click",function(){
-					closeHelp();
-				});
-				if(!getCookie("instructions"))
-					$(".blacky").fadeIn(200,function(){$("#instructions").fadeIn();})
-				if(getCookie("level"))
-					colora.level = parseInt(getCookie("level"));
-				if(getCookie("points"))
-					colora.points = parseInt(getCookie("points"));
-				if(getCookie("colors"))
-					colora.options.colors = JSON.parse(getCookie("colors"));
-				colora.loadGUI();
-				$("#helpme").bind("click",function(){
-					if(!$(".blacky").is(":visible"))
-						$(".blacky").fadeIn(200,function(){$("#instructions").fadeIn();})
-				})
-				$("#bottom > button").bind("click",function(){
-					jConfirm("You will loose all your points, colors and levels reached","Really reset app?",function(d){
-						if(d){
-							deleteCookies(["colors","points","level"]);
-							window.location.reload();
-						}
-					})
-				})
-				var word = ["C","O","L","O","R","A"];
-				var st = $("<h1/>");
-				for(var i in word)
-					st.append($("<span/>").css({
-						color:"white",
-						opacity:0.87
-					}).html(word[i]));
-				$("#title").html(st)
-				if (/*@cc_on!@*/false) {
-				    document.onfocusin = function(){colorify();}
-				    document.onfocusout = function(){window.clearTimeout(colorifyTo);}
-				} else {
-				    window.onfocus = function(){colorify();}
-				    window.onblur = function(){window.clearTimeout(colorifyTo);}
-				}
-				$("#colora_play").bind("click",function(){
-					switch(colora.state){
-						case 0:
-							$(this).html("STOP");
-							colora.run();
-							colora.state++;
-						break;
-						case 1:
-							colora.stop();
-							colora.state++;
-						break;
-						case 2:
-							colora.stop();
-							colora.state++;
-						break;
-						case 3:
-							colora.stop();
-							colora.state = 0;
-							setCookie("level",colora.level,3650);
-							setCookie("points",colora.points,3650);
-							setCookie("colors",JSON.stringify(colora.options.colors),3650);
-							$(this).html("PLAY");
-						break;
-					}
-				})	
-				colorify();
-				
-			})
-		</script>
+		<script src="js/Main.js"></script>
 		<script type="text/javascript">
 		  var uvOptions = {};
 		  (function() {

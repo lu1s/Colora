@@ -3,7 +3,9 @@ function Colora(options){
 	var opts = {
 		level: 1,
 		points: 0,
-		timeout: 150, //initial color rotation timeout
+		timeout: 300, //initial color rotation timeout
+		timeoutDecreaseRate: 30, //how many milliseconds timeout increase each level raise
+		timeoutBottomLimit: 10, //maximum speed the game can reach (less than 10 not recommended)
 		colors: ["#6152E0","#EBED45","#44DC32","#71207D","#D9321E"],
 		boxes: ["colora_box_1","colora_box_2","colora_box_3"],
 		buttonElement: "colora_play",
@@ -45,40 +47,65 @@ Colora.prototype = {
 	to: new Array(3),
 	stops: 0,
 	state: 0,
-	runBoxOne: function(){
+	counters: [0,0,0],
+	runBoxOne: function(c){
 		this.to[0] = setTimeout((function(self){
 			return function(){
 				var el = document.getElementById(self.options.boxes[0]);
-				var random = Math.floor(Math.random()*self.options.colors.length);
-				el.style.backgroundColor = self.options.colors[random]
-				self.runBoxOne();
+//				var random = Math.floor(Math.random()*self.options.colors.length);
+				c++;
+				if(c>=self.options.colors.length)
+					c=0;
+				el.style.backgroundColor = self.options.colors[c]
+				self.counters[0]++;
+				if(self.counters[0]==self.options.colors.length)
+					self.counters[0]==0;
+				self.runBoxOne(c);
 			};
 		})(this),this.options.timeout);
 	},
-	runBoxTwo: function(){
+	runBoxTwo: function(c){
 		this.to[1] = setTimeout((function(self){
 			return function(){
 				var el = document.getElementById(self.options.boxes[1]);
-				var random = Math.floor(Math.random()*self.options.colors.length);
-				el.style.backgroundColor = self.options.colors[random]
-				self.runBoxTwo();
+//				var random = Math.floor(Math.random()*self.options.colors.length);
+				c++;
+				if(c>=self.options.colors.length)
+					c=0;
+				el.style.backgroundColor = self.options.colors[c]
+				self.counters[1]++;
+				if(self.counters[1]==self.options.colors.length)
+					self.counters[1]==0;
+				self.runBoxTwo(c);
 			};
 		})(this),this.options.timeout);
 	},
-	runBoxThree: function(){
+	runBoxThree: function(c){
 		this.to[2] = setTimeout((function(self){
 			return function(){
 				var el = document.getElementById(self.options.boxes[2]);
-				var random = Math.floor(Math.random()*self.options.colors.length);
-				el.style.backgroundColor = self.options.colors[random]
-				self.runBoxThree();
+//				var random = Math.floor(Math.random()*self.options.colors.length);
+				c++;
+				if(c>=self.options.colors.length)
+					c=0;
+				el.style.backgroundColor = self.options.colors[c]
+				self.counters[2]++;
+				if(self.counters[2]==self.options.colors.length)
+					self.counters[2]==0;
+				self.runBoxThree(c);
 			};
 		})(this),this.options.timeout);
 	},
 	run: function(){
-		this.runBoxOne();
-		this.runBoxTwo();
-		this.runBoxThree();
+		this.counters[0] = Math.floor(Math.random()*this.options.colors.length);
+		for(var i=1;i<this.counters.length;i++){
+			do{
+				this.counters[i] = Math.floor(Math.random()*this.options.colors.length);
+			}while(this.counters[i-1]==this.counters[i]);
+		}
+		this.runBoxOne(this.counters[0]);
+		this.runBoxTwo(this.counters[1]);
+		this.runBoxThree(this.counters[2]);
 	},
 	stop: function(){
 		if(this.stops==0){
@@ -112,8 +139,15 @@ Colora.prototype = {
 				this.level++;
 				var hex = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"];
 				var color = "#";
-				for(var i=0;i<6;i++)
-					color+=hex[Math.floor(Math.random()*hex.length)];
+				do{
+					var check = true;
+					for(var i=0;i<6;i++)
+						color+=hex[Math.floor(Math.random()*hex.length)];
+					for(var i in this.options.colors)
+						this.options.colors[i]==color ? check=false : null;
+				}while(!check);
+				if(this.options.timeout>this.options.timeoutBottomLimit)
+					this.options.timeout-=this.options.timeoutDecreaseRate;
 				this.options.colors.push(color);
 				this.refreshColors(false);
 			}
