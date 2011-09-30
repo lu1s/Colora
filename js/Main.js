@@ -35,25 +35,33 @@
 			*/
 			var getPicture = function(tag){
 				//is preloaded image then put it as background
-				  if(preloadPicture.length>0)
-						$(".body").css({background:"url("+preloadPicture[preloadPicture.length-1].src+") no-repeat center center fixed"})
+				if(preloadPicture.length>0)
+					$("body").css({background:"url("+(preloadPicture.pop()).src+") no-repeat center center fixed"});
 				//send JSON request to flicr
 				var apiKey = "2bea2ad9f279cfd4b24aefaddb577951";
 				$.getJSON("http://api.flickr.com/services/rest/?method=flickr.photos.search&api_key="+apiKey+"&tags="+tag+",funny&tag_mode=all&amp;safe_search=1&content_type=1&format=json&jsoncallback=?",function(data){
 				    //get the actual image URL from the id and append it to the document
 				    $.getJSON("http://api.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key="+apiKey+"&photo_id="+data.photos.photo[Math.floor(Math.random()*data.photos.photo.length)].id+"&format=json&jsoncallback=?",function(pdata){
-					  	if(preloadPicture.length==0)
-				      		$("body").css({background:"url("+pdata.sizes.size[5].source+") no-repeat center center fixed"});
-					  	else{
+					  	if(getPictureFirstTime){
+					   		$("body").css({background:"url("+pdata.sizes.size[5].source+") no-repeat center center fixed"});
+							$.getJSON("http://api.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key="+apiKey+"&photo_id="+data.photos.photo[Math.floor(Math.random()*data.photos.photo.length)].id+"&format=json&jsoncallback=?",function(pdata){
+								var image = document.createElement("image");
+								image.src = pdata.sizes.size[5].source;
+								preloadPicture.push(image);
+							});
+							getPictureFirstTime = false;
+						}
+						else{
 							var image = document.createElement("image");
 							image.src = pdata.sizes.size[5].source;
-							prealoadPicture.push(image);
+							preloadPicture.push(image);
 						}
 					})
 				});
 			};
 			var tagArray = ["popart","modern","paint","wood","puzzle"];
 			var preloadPicture = [];
+			var getPictureFirstTime = true;
 			/*
 			* Test functions.
 			* Use the test() function to test the app via javascript console.
