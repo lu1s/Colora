@@ -3,6 +3,7 @@
 				$(".blacky").fadeOut();
 				$("#instructions").fadeOut();
 				setCookie("instructions","1",365*5);
+				_gaq.push(["_trackEvent","global","instructions_close"]);
 			};
 			var colorifyCounter = 0;
 			var colorifyTo;
@@ -86,6 +87,7 @@
 				state.level = colora.level;
 				testRun();
 				colora.options.timeout = tempTimeout;
+				_gaq.push(["_trackEvent","global","test_function"]);
 			}
 			/*
 			* End of test functions.
@@ -102,23 +104,30 @@
 				});
 				if(!getCookie("instructions"))
 					$(".blacky").fadeIn(200,function(){$("#instructions").fadeIn();})
-				if(getCookie("level"))
+				if(getCookie("level")){
 					colora.level = parseInt(getCookie("level"));
-				if(getCookie("points"))
+					_gaq.push(["_trackEvent","cookie","level","loaded",colora.level]);
+				}
+				if(getCookie("points")){
 					colora.points = parseInt(getCookie("points"));
-				if(getCookie("colors"))
+					_gaq.push(["_trackEvent","cookie","points","loaded",colora.points]);
+				}
+				if(getCookie("colors")){
 					colora.options.colors = JSON.parse(getCookie("colors"));
+					_gaq.push(["_trackEvent","cookie","colors"]);
+				}
 				colora.loadGUI();
 				state.level = colora.level;
 				state.points = colora.points;
 				$("#helpme").bind("click",function(){
 					if(!$(".blacky").is(":visible"))
-						$(".blacky").fadeIn(200,function(){$("#instructions").fadeIn();})
+						$(".blacky").fadeIn(200,function(){$("#instructions").fadeIn();_gaq.push(["_trackEvent","global","instructions_open"]);})
 				})
 				$("#bottom > button").bind("click",function(){
 					jConfirm("You will loose all your points, colors and levels reached","Really reset app?",function(d){
 						if(d){
 							deleteCookies(["colors","points","level"]);
+							_gaq.push(["_trackEvent","global","reset"]);
 							window.location.reload();
 						}
 					})
@@ -144,14 +153,17 @@
 							$(this).html("STOP");
 							colora.run();
 							colora.state++;
+							_gaq.push(["_trackEvent","game","play"]);
 						break;
 						case 1:
 							colora.stop();
 							colora.state++;
+							_gaq.push(["_trackEvent","game","stop_first"]);
 						break;
 						case 2:
 							colora.stop();
 							colora.state++;
+							_gaq.push(["_trackEvent","game","stop_second"]);
 						break;
 						case 3:
 							colora.stop();
@@ -164,19 +176,26 @@
 								state.points = colora.points;
 								state.level = colora.level;
 								getPicture(tagArray[Math.floor(Math.random()*tagArray.length)]);
+								_gaq.push(["_trackEvent","game","increased_level"]);
 							}
 							else if(colora.points > state.points){
 								if(colora.points - state.points == 200){
 									bar.show((colora.points-state.points)+"<br/>New image!",800);
 									state.points = colora.points;
 									getPicture(tagArray[Math.floor(Math.random()*tagArray.length)]);
+									_gaq.push(["_trackEvent","game","points_200"]);
 								}
 								else{
 									bar.show((colora.points-state.points),800);
 									state.points = colora.points;
+									if((colora.points-state.points) == 50)
+										_gaq.push(["_trackEvent","game","points_50"]);
+									else if((colora.points-state.points) == 100)
+										_gaq.push(["_trackEvent","game","points_200"]);
 								}
 							}
 							$(this).html("PLAY");
+							_gaq.push(["_trackEvent","game","stop_final"]);
 						break;
 					}
 				})	
