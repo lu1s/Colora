@@ -1,4 +1,4 @@
-COLORA 0.1
+COLORA 0.1.1
 ==============================================================================
 
 Author
@@ -45,10 +45,14 @@ Twitter Oauth APIs to make it social.
 Also another goal is to integrate:
 
 * Custom colors each time the user reach a new level
-* Start with a slower timeout and gradually increase it in each level
+* ~~Start with a slower timeout and gradually increase it in each level~~
 * Integrate a timer to make the game more difficult
+
+Note: Strikethrough mean that is already implemented.
 
 Licences:
 ------------------------------------------------------------------------------
 
-There is no license, and collaborations are welcome.
+COLORA by Luis Pulido is licensed under a Creative Commons Attribution-ShareAlike 3.0
+Unported License, based on a work at norbakgroup.com.
+Permissions beyond the scope of this license may be available at http://luispulido.com.
