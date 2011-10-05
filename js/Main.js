@@ -106,6 +106,11 @@
 					$(".blacky").fadeIn(200,function(){$("#instructions").fadeIn();})
 				if(getCookie("level")){
 					colora.level = parseInt(getCookie("level"));
+					var tmp = colora.options.timeout - (colora.level*colora.options.timeoutDecreaseRate)
+					if(tmp > colora.options.timeoutBottomLimit)
+						colora.options.timeout = tmp;
+					else
+						colora.options.timeout = colora.options.timeoutBottomLimit;
 					_gaq.push(["_trackEvent","cookie","level","loaded",colora.level]);
 				}
 				if(getCookie("points")){
